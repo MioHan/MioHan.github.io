@@ -12,8 +12,13 @@
   <p style="font-family:playball; font-size:30px; color:#ff1289; margin-bottom:2px">content:</p>
   <textarea id="content" cols="150" rows="10">
   </textarea>
-      <p><button id="submit" style="font-family:playball; font-size:20px; color:#ff1289; margin-bottom:2px" onmouseover=this.style.color="#e3530c" onmouseout=this.style.color="#ff1289">submit</button>
-
+  <div id="option">
+  <input name="updateButton"
+      type="button"
+      value="Update"
+      onclick="updateData()"
+  />
+  </div>
 <p style="font-family:playball; font-size:30px; color:#ff1289; margin-bottom:2px">past content:</p>
 <div id="history"></div>
 

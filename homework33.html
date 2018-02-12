@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<head>
+  <meta charset=UTF-8>
+  <title> Assignment 3 </title>
+</head>
+
+<body id ="mybody">
+  <svg id="viz"> </svg>
+  Assignment 3
+</body>
+
+<script src="http://d3js.org/d3.v4.min.js">
+</script>
+
+<p> <button id="click me" style="font-family:playball; font-size:20px; color:#ff1289; margin-bottom:2px" onmouseover=this.style.color="#e3530c" onmouseout=this.style.color="#ff1289">click me</button>
+
+  <script>
+  var body=document.getElementById("mybody");
+  body.style.backgroundColor="red"
+  body.style.fontFamily="Comic Sans MS";
+  body.id="newId";
+
+  var body=d3.select("body")
+  .style("backgroundColor","blue")
+  .style("font-family","Times New Roman")
+  .attr("id","mybody");
+
+  var mydata=[24,50,80,99,120];
+  var newdata=[70,90,110,130]
+  var drawCircle=function(fart){
+    var svg=d3.select("#viz");
+    var dots=svg.select.selectAll(".dots").data(fart)
+
+    dots.enter().append("circle")
+    .attr("class","dot")
+    .attr("r",0)
+    .attr("fill","black")
+    .attr("cx",function(dataPoint,index){
+      return 25+(index*50);
+    }
+  )
+  .attr("cy",25)
+  .transition()
+  .duration(1000)
+  .attr("r",function(c){
+    return c/2;
+  }
+);
+dots
+.transition()
+.duration(1000)
+.attr("r",function(dataPoint){return dataPoint/2;
+
+
+})
+.attr("fill","green");
+dot.exit()
+.transition()
+.duration(1000)
+.attr("r",0)
+.remove();
+}
+
+drawCircle(mydata)
+drawCircle(newdata)
+</script>
+</html>
+
+
+
+  }

@@ -1,0 +1,140 @@
+
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Rainbow</title>
+	<link href="https://fonts.googleapis.com/css?family=Sacramento" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Playball|Sacramento" rel="stylesheet">
+  <button id="submit" style="font-family:playball; font-size:20px; color:#ff1289; margin-bottom:2px" onmouseover=this.style.color="#e3530c" onmouseout=this.style.color="#ff1289">See!!</button>
+
+
+
+
+
+<style>
+	.axis path,
+	.axis line{
+		fill: none;
+		stroke: black;
+		shape-rendering: crispEdges;
+	}
+
+
+
+
+</style>
+
+</head>
+
+<body style="background-image:url(https://scontent.fnyc1-1.fna.fbcdn.net/v/t1.0-9/27972687_331439120677303_5237261874539894776_n.jpg?oh=a421ac7535c2a7942f061666fc95585c&oe=5B1CD925);background-repeat:inherit;background-attachment:fixed;background-size:cover; background-position:50% 50%;" />
+<h1 style="font-family:sacramento; font-size:50px; color:#ff1289; text-align:center">See the Rainbow</h1>
+
+
+
+	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<script>
+
+	// the area of canvas
+	var width = 400;
+	var height = 400;
+var mainColorList = ["red", "#FF7F00", "yellow", " #00FF00","#00FFFF", "blue", "#8B00FF"];
+	//add the canvas of SVG
+	var svg = d3.select("body")
+		.append("svg")
+		.attr("width", width)
+		.attr("height", height);
+
+	//margin
+	var padding = {left:30, right:30, top:20, bottom:20};
+
+	//define the dataset
+	var dataset = [10, 20, 30, 40, 30, 20, 10];
+ var body=d3.select("body");
+
+
+
+
+	//x axis scale
+	var xScale = d3.scale.ordinal()
+		.domain(d3.range(dataset.length))
+		.rangeRoundBands([0, width - padding.left - padding.right]);
+
+	//y axis scale
+	var yScale = d3.scale.linear()
+		.domain([0,d3.max(dataset)])
+		.range([height - padding.top - padding.bottom, 0]);
+
+	//define x axis
+	var xAxis = d3.svg.axis()
+		.scale(xScale)
+		.orient("bottom");
+
+	//define y axis
+	var yAxis = d3.svg.axis()
+		.scale(yScale)
+		.orient("left");
+
+	//intervals
+	var rectPadding = 4;
+
+	//add the rect
+  d3.select("#submit")
+  .on("click",function(){
+var p2=svg.select("#orange")
+  var rects = svg.selectAll(".MyRect")
+
+    .data(dataset)
+		.enter()
+		.append("rect")
+		.attr("class","MyRect")
+		.attr("fill","green")
+
+		.on("mouseover",function(){
+		 d3.selectAll(".MyRect")
+			 style ("fill",function(d,i){return mainColorList(i)
+			 })
+
+		})
+
+		.on("mouseout",function(d,i){
+			d3.selectAll(".MyRect")
+			.attr("fill","red")
+		})
+
+		.attr("transform","translate(" + padding.left + "," + padding.top + ")")
+		.attr("x", function(d,i){
+			return xScale(i) + rectPadding/2;
+		} )
+		.attr("width", xScale.rangeBand() - rectPadding )
+		.attr("y",function(d){
+			var min = yScale.domain()[0];
+			return yScale(min);
+		})
+		.attr("height", function(d){
+			return 0;
+		})
+		.style('fill', function (d, i) {
+	                     return mainColorList[i]
+	                 })
+		.transition()
+		.delay(function(d,i){
+			return i * 200;
+		})
+		.duration(2000)
+		.ease("bounce")
+		.attr("y",function(d){
+			return yScale(d);
+		})
+		.attr("height", function(d){
+			return height - padding.top - padding.bottom - yScale(d);
+		});
+
+})
+
+
+
+
+
+</script>
+</body>
+</html>

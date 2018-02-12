@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<head>
+<meta charset=UTF-8>
+<title>Javascript Libraries</title>
+</head>
+
+<body id="mybody">
+  <svg id="viz"></svg>
+  Hello Feb5
+</body>
+<script src="number.js"></script>
+<script src="http://d3js.org/d3.v4.min.js"></script>
+
+<script>
+var y =numbers.squared(22);
+console.log(y);
+var x = numbers.plus10(2)
+console.log(x)
+
+var body =document.getElementById("mybody");
+body.style.backgroundColor="red"
+body.style.fontFamily="Comic Sans MS";
+body.id="newId";
+
+var body = d3.select("body")
+.style("backgroundColor","blue")
+.style("font-family", "Times New Roman")
+.attr("id","mybody");
+
+
+var myData=[24,50,13,5,12];
+var newData=[33,4,20]
+var drawCircles = function(fart){
+  var svg=d3.select("#viz");
+  var dots = svg.selectAll(".dot").data(fart);
+
+//append means the actions/shapes you are gonna to draw with D3
+//enter circles
+  dots.enter().append("circle")
+    .attr("class","dot")
+    .attr("r",0)
+    .attr("fill","black")
+    //index是中间间距 index是序列值，从0开始
+    .attr("cx",function(dataPoint, index){
+      return 25+(index*50);
+    })
+    .attr("cy",25)
+    .transition()
+    .duration(1000)
+    .attr("r",function(d){
+      return d/2;
+    });
+
+
+//update circles
+dots
+.transition()
+.duration(1000)
+.attr("r",function(dataPoint){
+  return dataPoint/2;
+})
+.attr("fill","green");
+
+//exit circles
+dots.exit()
+.transition()
+.duration(1000)
+.attr("r",0)
+.remove();
+
+
+    }
+drawCircles(myData)
+drawCircles(newData)
+
+
+
+
+</script>
+</html>
