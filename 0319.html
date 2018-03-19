@@ -1,0 +1,250 @@
+<html>
+  <head>
+        <meta charset="utf-8">
+        <title>Drag Pie</title>
+  </head>
+
+<style>
+
+
+</style>
+    <body>
+      <p>the relationship between views and durations </p>
+<img src="https://scontent.fnyc1-1.fna.fbcdn.net/v/t31.0-8/28947661_346407845847097_3100922481789199106_o.jpg?oh=dc2b7b736c4feac41366835dd61362b2&oe=5B2C3FD0"/>
+		<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script>
+
+//tag 饼图的部分
+		var width = 500;
+		var height = 500;
+		var dataset = [38 ,35 ,24 ,22 ,18 ,17 ,16 ,14 ,12 ,10 ];
+
+		var svg = d3.select("body").append("svg")
+								.attr("width",width)
+								.attr("height",height);
+
+		var pie = d3.layout.pie();
+
+		var outerRadius = width / 4;
+		var innerRadius = width / 8;
+		var arc = d3.svg.arc()
+						.innerRadius(innerRadius)
+						.outerRadius(outerRadius);
+
+		var color = d3.scale.category10();
+
+		var drag = d3.behavior.drag()
+					.origin(function(d) { return d; })
+					.on("drag", dragmove);
+
+		var gAll = svg.append("g")
+					  .attr("transform","translate("+outerRadius+","+outerRadius+")");
+
+		var arcs = gAll.selectAll(".arcs_g")
+					  .data(pie(dataset))
+					  .enter()
+					  .append("g")
+					  .each(function(d){
+							d.dx = 0;
+							d.dy = 0;
+					  })
+					  .call(drag);
+
+		arcs.append("path")
+			.attr("fill",function(d,i){
+				return color(i);
+			})
+			.attr("d",function(d){
+				return arc(d);
+			});
+
+		arcs.append("text")
+			.attr("transform",function(d){
+				return "translate(" + arc.centroid(d) + ")";
+			})
+			.attr("text-anchor","middle")
+			.text(function(d){
+				return d.value;
+			});
+
+		console.log(dataset);
+		console.log(pie(dataset));
+
+
+		function dragmove(d) {
+			d.dx += d3.event.dx;
+			d.dy += d3.event.dy;
+			d3.select(this)
+				.attr("transform","translate("+d.dx+","+d.dy+")");
+		}
+    var tooltip = d3.select("body")
+    							.append("div")
+    							.attr("class","tooltip")
+    							.style("opacity",0.0);
+
+    		arcs.on("mouseover",function(d){
+    				/*
+    				鼠标移入时，
+    				（1）通过 selection.html() 来更改提示框的文字
+    				（2）通过更改样式 left 和 top 来设定提示框的位置
+    				（3）设定提示框的透明度为1.0（完全不透明）
+    				*/
+
+    				tooltip.html(d.data[0] + "的出货量为" + "<br />" + d.data[1] + " 百万台")
+    					.style("left", (d3.event.pageX) + "px")
+    					.style("top", (d3.event.pageY + 20) + "px")
+    					.style("opacity",1.0);
+    			})
+    			.on("mousemove",function(d){
+    				/* 鼠标移动时，更改样式 left 和 top 来改变提示框的位置 */
+
+    				tooltip.style("left", (d3.event.pageX) + "px")
+    						.style("top", (d3.event.pageY + 20) + "px");
+    			})
+    			.on("mouseout",function(d){
+    				/* 鼠标移出时，将透明度设定为0.0（完全透明）*/
+
+    				tooltip.style("opacity",0.0);
+
+    			});
+//tag 饼图wan
+
+
+
+
+
+
+	var width  = 700;	//SVG绘制区域的宽度
+	var height = 500;	//SVG绘制区域的高度
+
+	var svg = d3.select("body")			//选择<body>
+				.append("svg")			//在<body>中添加<svg>
+				.attr("width", width)	//设定<svg>的宽度属性
+				.attr("height", height);//设定<svg>的高度属性
+
+	//1. 确定初始数据
+	var dataset = [
+        { name: "PC" ,
+		  sales: [	{ year:2005, profit: 3000 },
+					{ year:2006, profit: 1300 },
+					{ year:2007, profit: 3700 },
+					{ year:2008, profit: 4900 },
+					{ year:2009, profit: 700 }] },
+		{ name: "SmartPhone" ,
+		  sales: [	{ year:2005, profit: 2000 },
+					{ year:2006, profit: 4000 },
+					{ year:2007, profit: 1810 },
+					{ year:2008, profit: 6540 },
+					{ year:2009, profit: 2820 }] },
+		{ name: "Software" ,
+		  sales: [	{ year:2005, profit: 1100 },
+					{ year:2006, profit: 1700 },
+					{ year:2007, profit: 1680 },
+					{ year:2008, profit: 4000 },
+					{ year:2009, profit: 4900 }] }
+    ];
+
+
+	//2. 转换数据
+	var stack = d3.layout.stack()
+					.values(function(d){ return d.sales; })
+					.x(function(d){ return d.year; })
+					.y(function(d){ return d.profit; });
+
+	var data = stack(dataset);
+
+	console.log(data);
+
+
+	//3. 绘制
+
+	//外边框
+	var padding = { left:50, right:100, top:30, bottom:30 };
+
+	//创建x轴比例尺
+	var xRangeWidth = width - padding.left - padding.right;
+
+	var xScale = d3.scale.ordinal()
+					.domain(data[0].sales.map(function(d){ return d.year; }))
+					.rangeBands([0, xRangeWidth],0.3);
+
+	//创建y轴比例尺
+
+	//最大利润（定义域的最大值）
+	var maxProfit = d3.max(data[data.length-1].sales, function(d){
+							return d.y0 + d.y;
+					});
+
+	//最大高度（值域的最大值）
+	var yRangeWidth = height - padding.top - padding.bottom;
+
+	var yScale = d3.scale.linear()
+					.domain([0, maxProfit])		//定义域
+					.range([0, yRangeWidth]);	//值域
+
+
+	//颜色比例尺
+	var color = d3.scale.category10();
+
+	//添加分组元素
+	var groups = svg.selectAll("g")
+					.data(data)
+					.enter()
+					.append("g")
+					.style("fill",function(d,i){ return color(i); });
+
+	//添加矩形
+	var rects = groups.selectAll("rect")
+					.data(function(d){ return d.sales; })
+					.enter()
+					.append("rect")
+					.attr("x",function(d){ return xScale(d.year); })
+					.attr("y",function(d){ return yRangeWidth - yScale( d.y0 + d.y ); })
+					.attr("width",function(d){ return xScale.rangeBand(); })
+					.attr("height",function(d){ return yScale(d.y); })
+					.attr("transform","translate(" + padding.left + "," + padding.top + ")");
+
+	//添加坐标轴
+	var xAxis = d3.svg.axis()
+				.scale(xScale)
+				.orient("bottom");
+
+	yScale.range([yRangeWidth, 0]);
+
+	var yAxis = d3.svg.axis()
+					.scale(yScale)
+					.orient("left");
+
+	svg.append("g")
+			.attr("class","axis")
+			.attr("transform","translate(" + padding.left + "," + (height - padding.bottom) +  ")")
+			.call(xAxis);
+
+	svg.append("g")
+			.attr("class","axis")
+			.attr("transform","translate(" + padding.left + "," + (height - padding.bottom - yRangeWidth) +  ")")
+			.call(yAxis);
+
+	//添加分组标签
+	var labHeight = 50;
+	var labRadius = 10;
+
+	var labelCircle = groups.append("circle")
+						.attr("cx",function(d){ return width - padding.right*0.98; })
+						.attr("cy",function(d,i){ return padding.top * 2 + labHeight * i; })
+						.attr("r",labRadius);
+
+	var labelText = groups.append("text")
+						.attr("x",function(d){ return width - padding.right*0.8; })
+						.attr("y",function(d,i){ return padding.top * 2 + labHeight * i; })
+						.attr("dy",labRadius/2)
+						.text(function(d){ return d.name; });
+
+</script>
+
+</body>
+</html>
+
+        </script>
+    </body>
+</html>
