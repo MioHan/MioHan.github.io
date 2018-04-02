@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Maps!</title>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://unpkg.com/topojson@3"></script>
+
+<style>
+
+</style>
+</head>
+<body>
+  <svg id="map" width=600 height=400>
+<rect width=600 height=400 fill="cornflowerblue"></rect>
+  </svg>
+
+
+</body>
+<script>
+var countryMapping = {
+  "US":"United States",
+  "BR":"Brazil",
+  "CA": "Canada"
+}
+
+
+d3.queue()
+.defer(d3.json,"world.json")
+.defer(d3.csv,"dancing.csv")
+
+.awaitAll(function(error,dataArray){
+  
+  var data= dataArray[0];
+  var dancingData = dataArray[1];
+  dancingData.forEach(function(country){
+    country.ranking = parseFloat(country.ranking);
+  });
+  console.log(dancingData);
+
+  var continentData = d3.nest()
+       .key(function(d){
+    return d.continent;
+  })
+    .entries(dancingData);
+    console.log(continentData);
+
+var dataExtent = d3.extent(dancingData,function(d){
+  return d.ranking;
+})
+
+
+var colorScale = d3.scaleLinear()
+              .domain(dataExtent)
+              .range(["white","red"]);
+
+var geoJSON = topojson.feature(data,data.objects.countries);
+console.log(geoJSON);
+
+              geoJSON.features= geoJSON.features.filter(function(feature){
+                return feature.id !="AQ";//把AQ区域抠出去的方式
+              })
+
+
+
+
+  console.log(geoJSON.features);
+  var proj = d3.geoMercator()//一种展示方式
+             .fitSize([600,400],geoJSON);
+
+  var path=d3.geoPath()//它要画path了
+  .projection(proj);//projection方程表示path用什么方式展示出来，括号里面的proj表示用的数据库是啥
+
+
+
+
+
+  var countries = d3.select("#map").selectAll("path")
+                  .data(geoJSON.features);
+
+  countries.enter().append("path")
+  .attr("d",function(feature){
+    return path(feature);
+  })
+  .attr("fill", function(feature){
+    var countryName = countryMapping[feature.id];
+
+    var countryData = dancingData.filter(function(country){
+      return country.name == countryName;
+    })
+    console.log(countryData);
+
+    if(countryData.length > 0){
+      var ranking = countryData[0].ranking;
+
+    return colorScale(ranking);
+    }
+    else{
+      return "gray";
+    }
+  })
+  .attr("stroke","white")
+  .attr("stroke-width",1);
+
+
+
+var points = [
+  {"name": "Boston", "coords": [-71.0589, 42.3601]},
+  {"name": "London", "coords": [-0.1278, 51.5074]}
+]
+
+var dots = d3.select("#map").selectAll("circle")
+           .data(points);
+
+
+dots.enter().append("circle")
+  .attr("transform", function(points){
+    return "translate(" + proj(points.coords) + ")";
+  })
+  .attr("fill","black")
+  .attr("r",8);
+
+
+
+});
+
+</script>
+</html>

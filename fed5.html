@@ -30,6 +30,7 @@ var body = d3.select("body")
 
 var myData=[24,50,13,5,12];
 var newData=[33,4,20]
+var hahaData=[11,22,32,10]
 var drawCircles = function(fart){
   var svg=d3.select("#viz");
   var dots = svg.selectAll(".dot").data(fart);
@@ -38,7 +39,7 @@ var drawCircles = function(fart){
 //enter circles
   dots.enter().append("circle")
     .attr("class","dot")
-    .attr("r",0)
+    .attr("r",5)
     .attr("fill","black")
     //index是中间间距 index是序列值，从0开始
     .attr("cx",function(dataPoint, index){
@@ -68,11 +69,15 @@ dots.exit()
 .attr("r",0)
 .remove();
 
-
+dots.exit()
+.transition()
+.duration(1000)
+.attr("r",0)
+.remove();
     }
 drawCircles(myData)
 drawCircles(newData)
-
+drawCircles(hahaData)
 
 
 

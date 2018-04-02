@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+        <meta charset="utf-8">
+        <title>Drag Pie</title>
+  </head>
+
+    <body>
+  
+        <script type="text/javascript"><>
+		<script src="https://d3js.org/d3.v3.min.js" charset="utf-8">
+SaikuChartRenderer.prototype.bubble = function(o){
+	this.type = "bubble";
+	options = this.getQuickOptions(o);
+	var data = this.process_data_tree({data: this.rawdata});
+	var nodes = pv.dom(data).nodes();
+
+	var diameter = 300,
+		format = d3.format(",d"),
+		color = d3.scale.category20c();
+
+	var bubble = d3.layout.pack()
+		.sort(null)
+		.size([options.width, options.height])
+		.padding(2.5);
+
+	var svg = d3.select('#'+options.canvas).append("svg")
+		.attr("width", options.width)
+		.attr("height", options.height)
+		.append("g")
+		.attr("transform", "translate(0,0)");
+
+	var node = svg.selectAll(".node")
+		.data(bubble.nodes(pvToJson(nodes[0]))
+		.filter(function(d) { return !d.children; }))
+		.enter().append("g")
+		.attr("class", "node")
+		.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+	console.log(pvToJson(nodes[0]));
+	node.append("title")
+		.text(function(d) {
+			if(d.flag==1){
+				d.value = -d.value;
+			}
+			return d.className + ": " + (d.value);
+		});
+
+	node.append("circle")
+		.attr("r",function(d){
+			return 0;
+		})
+		.attr("transform", function(d) { return "translate(" + 0 + "," + 0 + ")"; })
+		.transition()
+		.duration(2000)
+		.attr("r", function(d) {
+			return d.r;})                                     //设置圆的半径
+		.style("fill", function(d) {
+			var colortip =null;
+			if(d.packageName==undefined){
+				colortip = color(d.className);
+			}else{
+				 colortip =  color(d.packageName);
+				if(d.flag==1){
+					colortip = "#ff0005";
+				}
+
+			}
+				return colortip;
+		});
+
+	node.append("text")
+		.attr("dy", ".3em")
+		.style("text-anchor", "middle")
+		.text(function(d) { return d.className.substring(0, d.r / 3); })
+		.attr("font-size","0")
+		.transition()
+		.delay(function(d,i){
+			return 1500+1*i;
+		})
+		.attr("font-size","1");
+
+// Returns a flattened hierarchy containing all leaf nodes under the root.
+	/*function classes(root) {
+		var classes = [];
+
+		function recurse(name, node) {
+			if (node.children) node.children.forEach(function(child) { recurse(node.name, child); });
+			else {classes.push({ packageName:name,className: node.name, value: node.size,flag:node.flag})};
+		}
+
+		recurse(null, root);
+		return {children: classes};
+
+	}*/
+	function pvToJson(root){
+		var pvToJson = [];
+
+		function recurse(name, node) {
+			if (node.childNodes.length!=0){
+			
+				for(var i=0;i<node.childNodes.length;i++){
+					recurse(node.nodeName,node.childNodes[i]);
+				}
+				
+			}
+			else {
+				pvToJson.push({ packageName:name,className: node.nodeName, value: node.nodeValue})
+			};
+		}
+
+		recurse(null, root);
+		return {children: pvToJson};
+	}
+	d3.select(self.frameElement).style("height", diameter + "px");
+	this.chart = svg;
+};
+

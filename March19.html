@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Maps!</title>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://unpkg.com/topojson@3"></script>
+
+<style>
+
+</style>
+</head>
+<body>
+  <svg id="map" width=600 height=400>
+<rect width=600 height=400 fill="cornflowerblue"></rect>
+  </svg>
+
+
+</body>
+<script>
+
+d3.queue()
+.defer(d3.json,"world.json")
+.defer(d3.json,"dataObject.json")
+.defer(d3.csv,"dataTable.csv")
+.awaitAll(function(error,dataArray){
+  var data= dataArray[0];
+  var jsonData = dataArray[1];
+  var csvData = dataArray[2];
+  var textData = dataArray[3];
+  console.log(dataArray);
+})
+
+d3.json("world.json", function(error,data){
+  console.log(data);
+  var geoJSON = topojson.feature(data, data.objects.countries);
+  console.log(geoJSON);
+  var proj=d3.geoMercator()//一种展示方式
+  .fitSize([600,400],geoJSON);
+
+  var path=d3.geoPath()//它要画path了
+  .projection(proj);//projection方程表示path用什么方式展示出来，括号里面的proj表示用的数据库是啥
+
+  geoJSON.features= geoJSON.features.filter(function(feature){
+    return feature.id!="AQ";//把AQ区域抠出去的方式
+  });
+
+
+
+  var countries = d3.select("#map").selectAll("path")
+  .data(geoJSON.features)
+  countries.enter().append("path")
+  .attr("fill",function(feature){
+    if(feature. id == "US"){
+      return "red";
+    }
+    else{
+      return "forestgreen";
+    }
+  })
+  .attr("stroke","white")
+  .attr("stroke-width",1)
+  .attr("d",function(feature){
+    return path(feature)
+  });
+
+
+
+var points = [
+  {"name": "Boston", "coords": [-71.0589, 42.3601]},
+  {"name": "London", "coords": [-0.1278, 51.5074]}
+];
+
+var dots = d3.select("#map").selectAll("circle")
+.data(points)
+
+
+dots.enter().append("circle")
+  .attr("transform", function(points){
+    return "translate(" + proj(points.coords) + ")";
+  })
+  .attr("fill","black")
+  .attr("r",8);
+
+
+
+});
+
+</script>
+</html>
