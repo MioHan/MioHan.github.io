@@ -1,0 +1,115 @@
+<!DOCTYPE>
+<html>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<head>
+<title>散点图</title>
+</head>
+ 
+
+
+<body>
+    <!-- // <script src="d3/d3.js" charset="utf-8"></script> -->
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>  
+<script>
+
+var width=400;
+var height=400;
+d3.csv("teddata zhengli.csv", function(error, data) {
+        if(error) {
+            console.log("Error!");
+        }
+        else {
+
+            console.log(data);
+
+var padding=100;
+
+var svg=d3.select("body")
+            .append("circle")
+            
+
+var maxlengthoftitle = d3.max(data, function(d) {
+              return parseInt(d.lengthoftitle);
+            });
+            console.log(maxlengthoftitle)
+
+var maxviews = d3.max(data, function(d) {
+              return parseInt(d.views);
+            });
+            console.log(maxviews)
+
+var xScale = d3.scaleLinear()
+              .domain([0, maxlengthoftitle])
+              .range([padding, window.innerWidth - padding * 2]);
+//svg hua bu da xiao
+var svg = d3.select("#viz")
+              .attr("width", window.innerWidth)
+              .attr("height", window.innerHeight);
+
+var xScale=d3.scale.linear()
+                .domain([0,d3.max(lengthoftitle,function(d){
+                    return d[0];
+                })])
+                .range([0,width-padding.left-padding.right]);
+
+var yScale=d3.scale.linear()
+                .domain([0,1.2*d3.max(views,function(d){
+                    return d[1];
+                })])
+                .range([height-padding.top-padding.bottom,0]);
+
+var maxviews = d3.max(data,function(d){
+                return parseInt(d.views);
+            });
+            console.log(maxviews)
+
+            var yScale = d3.scaleLinear()
+                .domain([0,maxviews])
+                .range([800, padding]);
+
+            var yAxis = d3.axisLeft(yScale);
+
+var circle=svg.selectAll("circle")
+                .data(dataset)
+                .enter()
+                .append("circle")
+                .attr("fill","black")
+                .attr("cx",function(d){
+                    return padding.left+xScale(d[0]);//设置圆心x坐标
+                })
+                .attr("cy",function(d){
+                    
+                    console.log(yScale(d[1]));
+                    return yScale(d[1])+padding.bottom;
+                    //调节y的值  调了好久 
+                    //需要与设置的y轴的坐标相对应
+                })
+                .attr("r",5);//半径
+
+//定义x轴
+var xAxis=d3.svg.axis()
+            .scale(xScale)
+            .orient("bottom");//坐标轴方向
+//定义Y轴
+var yAxis=d3.svg.axis()
+            .scale(yScale)
+            .orient("left");
+
+//添加X轴
+svg.append("g")
+    .attr("class","axis")
+    .attr("transform","translate("+padding.left+","+(height-padding.bottom)+")")
+    .call(xAxis);
+
+//添加y轴
+svg.append("g")
+    .attr("class","axis")
+    .attr("transform","translate("+padding.left+","+padding.top+")")
+    // .attr("transform","translate("+padding.left+(height-padding.bottom-yAxisWidth)+")")
+    .call(yAxis);
+
+</script>
+
+</body>
+</html>

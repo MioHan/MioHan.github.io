@@ -452,6 +452,473 @@ SaikuChartRenderer.prototype.bubble = function(o){
 
 
 
+<html>
+  <head>
+        <meta charset="utf-8">
+        <title>Drag Pie</title>
+  </head>
+
+
+    <body>
+    
+
+		<script src="https://d3js.org/d3.v3.min.js" charset="utf-8">
+		</script>
+        <script type="text/javascript">
+        d3.csv("teddata zhengli.csv",function(error,data){
+        	if(error){
+        		console.log("Error!");
+        	}
+        	else{
+        		console.log(data);
+        		console.log("csv string");
+        		data.forEach(function(d){
+        			d.value=parseFloat(d.value)
+        		})
+        	}
+        })
+
+
+//tag 饼图的部分
+		var width = 500;
+		var height = 500;
+		var dataset = [38 ,35 ,24 ,22 ,18 ,17 ,16 ,14 ,12 ,10 ];
+
+		var svg = d3.select("body").append("svg")
+								.attr("width",width)
+								.attr("height",height);
+
+		var pie = d3.layout.pie();
+
+		var outerRadius = width / 4;
+		var innerRadius = width / 8;
+		var arc = d3.svg.arc()
+						.innerRadius(innerRadius)
+						.outerRadius(outerRadius);
+
+		var color = d3.scale.category10();
+
+		var drag = d3.behavior.drag()
+					.origin(function(d) { return d; })
+					.on("drag", dragmove);
+
+		var gAll = svg.append("g")
+					  .attr("transform","translate("+outerRadius+","+outerRadius+")");
+
+		var arcs = gAll.selectAll(".arcs_g")
+					  .data(pie(dataset))
+					  .enter()
+					  .append("g")
+					  .each(function(d){
+							d.dx = 0;
+							d.dy = 0;
+					  })
+					  .call(drag);
+
+		arcs.append("path")
+			.attr("fill",function(d,i){
+				return color(i);
+			})
+			.attr("d",function(d){
+				return arc(d);
+			});
+
+		arcs.append("text")
+			.attr("transform",function(d){
+				return "translate(" + arc.centroid(d) + ")";
+			})
+			.attr("text-anchor","middle")
+			.text(function(d){
+				return d.value;
+			});
+
+		console.log(dataset);
+		console.log(pie(dataset));
+
+
+		function dragmove(d) {
+			d.dx += d3.event.dx;
+			d.dy += d3.event.dy;
+			d3.select(this)
+				.attr("transform","translate("+d.dx+","+d.dy+")");
+		}
+    var tooltip = d3.select("body")
+    							.append("div")
+    							.attr("class","tooltip")
+    							.style("opacity",0.0);
+
+    		arcs.on("mouseover",function(d){
+    				/*
+    				鼠标移入时，
+    				（1）通过 selection.html() 来更改提示框的文字
+    				（2）通过更改样式 left 和 top 来设定提示框的位置
+    				（3）设定提示框的透明度为1.0（完全不透明）
+    				*/
+
+    				tooltip.html(d.data[0] + "123" + "<br />" + d.data[1] + "4567")
+    					.style("left", (d3.event.pageX) + "px")
+    					.style("top", (d3.event.pageY + 20) + "px")
+    					.style("opacity",1.0);
+    			})
+    			.on("mousemove",function(d){
+    				/* 鼠标移动时，更改样式 left 和 top 来改变提示框的位置 */
+
+    				tooltip.style("left", (d3.event.pageX) + "px")
+    						.style("top", (d3.event.pageY + 20) + "px");
+    			})
+    			.on("mouseout",function(d){
+    				/* 鼠标移出时，将透明度设定为0.0（完全透明）*/
+
+    				tooltip.style("opacity",0.0);
+
+    			});
+//tag 饼图 finished
+
+
+//11111111111111
+<script>
+var bubbleChart=function(){
+    var width = 600,
+    height = 400;
+
+    function chart(selection){
+        
+    }
+
+    return chart;
+}
+var chart = bubbleChart().width(300).height(200);
+
+var bubbleChart = function () {
+    var width = 600
+    height = 400;
+    function chart(selection){
+        // we gonna get here
+    }
+
+    chart.width = function(value) {
+        if (!arguments.length) { return width; }
+        width = value;
+
+        return chart;
+    }
+    chart.height = function(value) {
+        if (!arguments.length) { return height; }
+        height = value;
+
+        return chart;
+    }
+
+    return chart;
+}
+
+var chart = bubbleChart();
+bubbleChart().width(); // returns 600
+var chart = bubbleChart().width(600).height(400);
+
+var chart = bubbleChart(); 
+chart.setWidth(600); 
+chart.setHeight(400);
+<svg width="600" height="400">
+    <circle></circle> // a story from data
+    <circle></circle> // another story from data
+    ...
+</svg>
+
+
+d3.csv('teddata zhengli.csv', function(error, our_data) {
+    var data = our_data; //here you can do what you want with the data
+}
+
+<div class="chart-example" id="chart"><svg></svg></div>
+d3.csv('medium_january.csv', function(error, our_data) {
+    if (error) {
+        console.error('Error getting or parsing the data.');
+        throw error;
+    }
+    var chart = bubbleChart().width(600).height(400);
+    d3.select('#chart').data(our_data).call(chart);
+ });
+
+ var simulation = d3.forceSimulation(data)
+ .force("charge", d3.forceManyBody().strength([-50]))
+ .force("x", d3.forceX())
+ .force("y", d3.forceY())
+ .on("tick", ticked);
+
+ function ticked(e) {
+    node.attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+    // 'node' is each circle of the bubble chart
+ }
+
+ var simulation = d3.forceSimulation(data) 
+    .force("charge", d3.forceManyBody().strength([-50])) 
+    .force("x", d3.forceX()) 
+    .force("y", d3.forceY()) 
+    .on("tick", ticked); 
+function ticked(e) { 
+    node.attr("cx", function(d) { return d.x; }) 
+        .attr("cy", function(d) { return d.y; }); 
+}
+
+var scaleRadius = d3.scaleLinear()
+            .domain([d3.min(data, function(d) { return +d.views; }), 
+                    d3.max(data, function(d) { return +d.views; })])
+            .range([5,18]);
+
+            var node = svg.selectAll("circle")
+   .data(data)
+   .enter()
+   .append("circle")
+   .attr('r', function(d) { return scaleRadius(d.views)})
+});
+
+var colorCircles = d3.scaleOrdinal(d3.schemeCategory10);
+
+var node = svg.selectAll("circle")
+    .data(data)
+    .enter()
+    .append("circle")
+    .attr('r', function(d) { return scaleRadius(d.views)})
+    .style("fill", function(d) { return colorCircles(d.category)});
+
+    var node = svg.selectAll("circle")
+ .data(data)
+ .enter()
+ .append("circle")
+ .attr('r', function(d) { return scaleRadius(d.views)})
+ .style("fill", function(d) {return colorCircles(d.category)})
+ .attr('transform', 'translate(' + [width / 2, height / 2] + ')');
+
+ var tooltip = selection
+ .append("div")
+ .style("position", "absolute")
+ .style("visibility", "hidden")
+ .style("color", "white")
+ .style("padding", "8px")
+ .style("background-color", "#626D71")
+ .style("border-radius", "6px")
+ .style("text-align", "center")
+ .style("font-family", "monospace")
+ .style("width", "400px")
+ .text("");
+var node = svg.selectAll("circle")
+ .data(data)
+ .enter()
+ .append("circle")
+ .attr('r', function(d) { return scaleRadius(d.views)})
+ .style("fill", function(d) {return colorCircles(d.category)})
+ .attr('transform', 'translate(' + [width / 2, height / 2] + ')')
+ .on("mouseover", function(d){
+     tooltip.html(d.category +"<br>"+ d.title+"<br>"+d.views); 
+     return tooltip.style("visibility", "visible");})
+ .on("mousemove", function(){
+   return tooltip.style("top", (d3.event.pageY-       10)+"px").style("left",(d3.event.pageX+10)+"px");})
+ .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
+
+
+ //222222222222222222
+
+ <div class="chart-example" id="chart"><svg></svg></div>
+
+
+<script src="bubble_chart.js"></script>
+<script>
+    d3.csv('teddata zhengli.csv', function(error, data) {
+      if (error) {
+          console.error('Error getting or parsing the data.');
+          throw error;
+      }
+      var chart = bubbleChart().width(600).height(400);
+      // selection.datum() returns the bound datum for the first element in the selection and doesn't join the specified array of data with the selected elements
+      d3.select('#chart').datum(data).call(chart);
+    });
+
+
+//333333333333
+
+ <body>
+        <script src="https://d3js.org/d3.v3.min.js" charset="utf-8">
+        </script>
+        <script type="text/javascript">
+    color    = d3.scale.category20b(); //color category
+
+var bubble = d3.layout.pack()
+    .sort(null)
+    .size([diameter, diameter])
+    .padding(1.5);
+
+var svg = d3.select("body")
+    .append("svg")
+    .attr("width", diameter)
+    .attr("height", diameter)
+    .attr("class", "bubble");
+
+d3.csv("fruit.csv", function(error, data){
+
+    //convert numerical values from strings to numbers
+    data = data.map(function(d){ d.value = +d["Amount"]; return d; });
+
+    //bubbles needs very specific format, convert data to this.
+    var nodes = bubble.nodes({children:data}).filter(function(d) { return !d.children; });
+
+    //setup the chart
+    var bubbles = svg.append("g")
+        .attr("transform", "translate(0,0)")
+        .selectAll(".bubble")
+        .data(nodes)
+        .enter();
+
+    //create the bubbles
+    bubbles.append("circle")
+        .attr("r", function(d){ return d.r; })
+        .attr("cx", function(d){ return d.x; })
+        .attr("cy", function(d){ return d.y; })
+        .style("fill", function(d) { return color(d.value); });
+
+    //format the text for each bubble
+    bubbles.append("text")
+        .attr("x", function(d){ return d.x; })
+        .attr("y", function(d){ return d.y + 5; })
+        .attr("text-anchor", "middle")
+        .text(function(d){ return d["Fruit"]; })
+        .style({
+            "fill":"white", 
+            "font-family":"Helvetica Neue, Helvetica, Arial, san-serif",
+            "font-size": "12px"
+        });
+})
+
+//4444444444444
+
+<script src="https://d3js.org/d3.v3.min.js" charset="utf-8">
+SaikuChartRenderer.prototype.bubble = function(o){
+	this.type = "bubble";
+	options = this.getQuickOptions(o);
+	var data = teddata ({data: this.rawdata});
+	var nodes = pv.dom(data).nodes();
+
+	var diameter = 300,
+		format = d3.format(",d"),
+		color = d3.scale.category20c();
+
+	var bubble = d3.layout.pack()
+		.sort(null)
+		.size([options.width, options.height])
+		.padding(2.5);
+
+	var svg = d3.select('#'+options.canvas).append("svg")
+		.attr("width", options.width)
+		.attr("height", options.height)
+		.append("g")
+		.attr("transform", "translate(0,0)");
+
+	var node = svg.selectAll(".node")
+		.data(bubble.nodes(pvToJson(nodes[0]))
+		.filter(function(d) { return !d.children; }))
+		.enter().append("g")
+		.attr("class", "node")
+		.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+	console.log(pvToJson(nodes[0]));
+	node.append("title")
+		.text(function(d) {
+			if(d.flag==1){
+				d.value = -d.value;
+			}
+			return d.className + ": " + (d.value);
+		});
+
+	node.append("circle")
+		.attr("r",function(d){
+			return 0;
+		})
+		.attr("transform", function(d) { return "translate(" + 0 + "," + 0 + ")"; })
+		.transition()
+		.duration(2000)
+		.attr("r", function(d) {
+			return d.r;})                                     //设置圆的半径
+		.style("fill", function(d) {
+			var colortip =null;
+			if(d.packageName==undefined){
+				colortip = color(d.className);
+			}else{
+				 colortip =  color(d.packageName);
+				if(d.flag==1){
+					colortip = "#ff0005";
+				}
+
+			}
+				return colortip;
+		});
+
+	node.append("text")
+		.attr("dy", ".3em")
+		.style("text-anchor", "middle")
+		.text(function(d) { return d.className.substring(0, d.r / 3); })
+		.attr("font-size","0")
+		.transition()
+		.delay(function(d,i){
+			return 1500+1*i;
+		})
+		.attr("font-size","1");
+
+// Returns a flattened hierarchy containing all leaf nodes under the root.
+	/*function classes(root) {
+		var classes = [];
+
+		function recurse(name, node) {
+			if (node.children) node.children.forEach(function(child) { recurse(node.name, child); });
+			else {classes.push({ packageName:name,className: node.name, value: node.size,flag:node.flag})};
+		}
+
+		recurse(null, root);
+		return {children: classes};
+
+	}*/
+	function pvToJson(root){
+		var pvToJson = [];
+
+		function recurse(name, node) {
+			if (node.childNodes.length!=0){
+			
+				for(var i=0;i<node.childNodes.length;i++){
+					recurse(node.nodeName,node.childNodes[i]);
+				}
+				
+			}
+			else {
+				pvToJson.push({ packageName:name,className: node.nodeName, value: node.nodeValue})
+			};
+		}
+
+		recurse(null, root);
+		return {children: pvToJson};
+	}
+	d3.select(self.frameElement).style("height", diameter + "px");
+	this.chart = svg;
+};
+
+ </style>
+</body>
+ </html>
+
+
+
+
+
+	
+					
+
+</script>
+
+</body>
+</html>
+
+        </script>
+    </body>
+</html>
+
 
 	
 					

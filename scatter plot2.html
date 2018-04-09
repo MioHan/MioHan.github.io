@@ -1,5 +1,5 @@
 
-<!DOCTYPE html>
+<!DOCTYPE>
 <html>
 
   <head>
@@ -23,22 +23,22 @@
 		}
 		else {
 
-			console.log(data);
+			console.log(data);}
 
 		    var padding = 100;
 //x轴
-		    var maxduration = d3.max(data, function(d) {
-		      return parseInt(d.duration);
+		    var maxlengths = d3.max(data, function(d) {
+		      return parseInt(d.lengths);
 		    });
-			console.log(maxduration)
+			console.log(maxlengths)
 
-			var maxlanguages = d3.max(data, function(d) {
-		      return parseInt(d.languages);
+			var maxviews = d3.max(data, function(d) {
+		      return parseInt(d.views);
 		    });
-			console.log(maxlanguages)
+			console.log(maxviews)
 
 		    var xScale = d3.scaleLinear()
-		      .domain([0, maxduration])
+		      .domain([0, maxlengths])
 		      .range([padding, window.innerWidth - padding * 2]);
 
 		    var svg = d3.select("#viz")
@@ -62,6 +62,7 @@
 			var yAxis = d3.axisLeft(yScale);
 
 			d3.select("g#yAxis")
+			//这个是指坐标轴的位置
 				.attr("transform","translate(99.8,0)")
 				.call(yAxis);
 
@@ -88,27 +89,22 @@
 		      })
 		      .transition().duration(1500)
 		        .attr("cx", function(d) {
-		          return xScale(d.duration);
+		          return xScale(d.lengths);
 		        })
 				.attr("cy", function(d) {
 		          return yScale(d.views);
 		        })
-		        .attr("r", function(d) {
-		          return d.languages;
-		        })
-		        .attr("opacity",function(d){
-		        	return d.languages/70;
-		        }
-		        	)
+		        
+		        	
 		        ;
-	}
+	
     });
 //开始画散点图
 //x轴
-var maxlengthoftitle = d3.max(data, function(d) {
-		      return parseInt(d.lengthoftitle);
+var maxlengths = d3.max(data, function(d) {
+		      return parseInt(d.duration);
 		    });
-			console.log(maxlengthoftitle)
+			console.log(maxlengths)
 
 			var maxviews = d3.max(data, function(d) {
 		      return parseInt(d.views);
@@ -116,7 +112,7 @@ var maxlengthoftitle = d3.max(data, function(d) {
 			console.log(maxviews)
 
 		    var xScale = d3.scaleLinear()
-		      .domain([0, maxlengthoftitle])
+		      .domain([0, maxlengths])
 		      .range([padding, window.innerWidth - padding * 2]);
 //svg hua bu da xiao
 		    var svg = d3.select("#viz")
