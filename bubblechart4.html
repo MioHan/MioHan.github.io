@@ -120,8 +120,8 @@ var maxlengthoftitle = d3.max(data, function(d) {
 		      .range([padding, window.innerWidth - padding * 2]);
 //svg hua bu da xiao
 		    var svg = d3.select("#viz")
-		      .attr("width", window.innerWidth)
-		      .attr("height", window.innerHeight);
+		      .attr("width", 1600)
+		      .attr("height", 1600);
 
 		    var xAxis = d3.axisBottom(xScale);
 		    d3.select("g#xAxis")
@@ -146,7 +146,133 @@ var maxlengthoftitle = d3.max(data, function(d) {
 		    var circles = svg.selectAll("circle")
 		      .data(data);
   </script>
-  
+  <script>
+ 
+    d3.csv("teddata zhengli.csv", function(error, data) {
+		if(error) {
+			console.log("Error!");
+		}
+		else {
+
+			console.log(data);}
+
+		    var padding = 100;
+//x轴
+		    var maxlengths = d3.max(data, function(d) {
+		      return parseInt(d.lengths);
+		    });
+			console.log(maxlengths)
+
+			var maxviews = d3.max(data, function(d) {
+		      return parseInt(d.views);
+		    });
+			console.log(maxviews)
+
+		    var xScale = d3.scaleLinear()
+		      .domain([0, maxlengths])
+		      .range([padding, window.innerWidth - padding * 2]);
+
+		    var svg = d3.select("#viz")
+		      .attr("width", window.innerWidth)
+		      .attr("height", window.innerHeight);
+
+		    var xAxis = d3.axisBottom(xScale);
+		    d3.select("g#xAxis")
+		      .attr("transform", "translate(0, 800)")
+		      .call(xAxis);
+//y轴
+			var maxviews = d3.max(data,function(d){
+				return parseInt(d.views);
+			});
+			console.log(maxviews)
+
+			var yScale = d3.scaleLinear()
+				.domain([0,maxviews])
+				.range([800, padding]);
+
+			var yAxis = d3.axisLeft(yScale);
+
+			d3.select("g#yAxis")
+			//这个是指坐标轴的位置
+				.attr("transform","translate(99.8,0)")
+				.call(yAxis);
+
+		    var circles = svg.selectAll("circle")
+		      .data(data);
+
+		    circles.enter().append("circle")
+		      .attr("cx", padding)
+		      .attr("cy", 100)
+		      .attr("r", 20)
+		      .attr("fill","green")
+		      .attr("stroke","black")
+		      
+		      .on("mouseenter", function(d) {
+		        d3.select("#tooltip")
+		          .style("display", "block")
+		          .style("top", "100px")
+		          .style("left", xScale(d.data) + "px")
+		          .text(d.name);
+		      })
+		      .on("mouseleave", function(d) {
+		        d3.select("#tooltip")
+		          .style("display", "none");
+		      })
+		      .transition().duration(1500)
+		        .attr("cx", function(d) {
+		          return xScale(d.lengths);
+		        })
+				.attr("cy", function(d) {
+		          return yScale(d.views);
+		        })
+		        
+		        	
+		        ;
+	
+    });
+//开始画散点图
+//x轴
+var maxlengths = d3.max(data, function(d) {
+		      return parseInt(d.duration);
+		    });
+			console.log(maxlengths)
+
+			var maxviews = d3.max(data, function(d) {
+		      return parseInt(d.views);
+		    });
+			console.log(maxviews)
+
+		    var xScale = d3.scaleLinear()
+		      .domain([0, maxlengths])
+		      .range([padding, window.innerWidth - padding * 2]);
+//svg hua bu da xiao
+		    var svg = d3.select("#viz")
+		      .attr("width", 1600)
+		      .attr("height", 3200);
+
+		    var xAxis = d3.axisBottom(xScale);
+		    d3.select("g#xAxis")
+		      .attr("transform", "translate(0, 1600)")
+		      .call(xAxis);
+//y轴
+			var maxviews = d3.max(data,function(d){
+				return parseInt(d.views);
+			});
+			console.log(maxviews)
+
+			var yScale = d3.scaleLinear()
+				.domain([0,maxviews])
+				.range([800, padding]);
+
+			var yAxis = d3.axisLeft(yScale);
+
+			d3.select("g#yAxis")
+				.attr("transform","translate(99.8,0)")
+				.call(yAxis);
+
+		    var circles = svg.selectAll("circle")
+		      .data(data);
+  </script>
 
 
 </html>
