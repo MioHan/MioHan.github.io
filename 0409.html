@@ -1,0 +1,69 @@
+<html>  
+<head>  
+	<meta charset="utf-8">  
+	<title>Ted Data Analysis</title>  
+</head> 
+
+<style>
+
+	iframe {
+		border: 0;
+		overflow: hidden;
+	}
+
+</style>
+
+<body> 
+	<div align="center";>
+	<img src="tedhead.jpg";>
+           </div>
+
+
+<p style="padding-left:20px; text-align:center;"> (This is an simple data visulization analysis of the Ted dataset from Ted 1984 to Ted 2017)</p>
+<br><br><br>
+<p style="text-align:center;font-size:20px;"><b>1. what jobs do Ted speakers usually do?</b></p>
+			<iframe scrolling="no" width=2000 height=450 src="barchart.html"  ></iframe><br>
+	<p style="padding-left:70px; padding-right:90px;">The bar chart shows all the occupations that more than 10 speakers engaged in. We can see that among all 971 speakers, there are <b><span style="color:#cc0000;">18 people work as inventors which is the top 1 job </span></b>that speakers engaged in. 
+		And 17 writers, 16 designers, 14 artists, and 11 architects, 11 filmmakers, 11 psychologists.
+
+
+
+<br><br><br><br><br>
+<p style="text-align:center;font-size:20px;"><b>2. Is there any correlation between <u>views</u>, <br><u>duration</u>, <u>comments</u>, and <u>the number of languades translated to</u>?</b></p>
+	<iframe scrolling="no" width=1200 height=900 src="bubblechart4.html"></iframe>
+	<p style="padding-left:70px; padding-right:90px;"> In this bubble chart, x axis refers to the duration and y axis refers to the number of views; the radius of bubbles means the number of comments; and the opicity means how many languages this ted video has been traslated to, if it's translated to more language, it will be more opaque.
+	<br> <br>And when you put the mouse cursor on the certain circle, its name will show up at the bottom of the chart.
+<br><br>
+		From the chart we can see that <b><span style="color:#cc0000;">people prefer the duration of 17-22 minutes</b> </span>, and if the talk is too long, people will not click.
+<br><br>
+		And when it comes to the comments, except for one outlier "militant athrism", <b><span style="color:#cc0000;">it's positive correlation between the number of views and comments. </b></span>And <b><span style="color:#cc0000;">when the duration is among 17-22 minutes, the comments will be relatively high, too.</b></span>
+
+
+<br><br><br><br><br>
+<p style="text-align:center;font-size:20px;"><b>3.What topics speakers prefer talking about?</b></p>
+	   	<iframe scrolling="no" width=800 height=500 src="piechart2.html"></iframe>
+<p style="padding-left:70px; padding-right:90px;">Among these 971 ted talks, <b><span style="color:#cc0000;">38 of them talk about culture</b></span>, and <b><span style="color:#cc0000;">35 talk about technology</b></span>, and <b><span style="color:#cc0000;">24 are about entertainment. </b></span>These are top 3 topics that speakers always talk about. 
+
+
+
+
+
+<br><br><br><br><br>
+<p style="text-align:center;font-size:20px;"><b>4.Is there any correlation between <u>views</u> and <u>the lengths of its title</u>?</b></p>
+	<iframe scrolling="no" width=1600 height=850 src="scatter plot2.html"></iframe><br>
+<p style="padding-left:70px; padding-right:90px;"> This scatter plot chart shows the relation between the length of title and views of these 971 teds. The x axis refers to how many words consist the title and y axis refers to the number of views. <br><br>From this chart, we can see that most ted talk's title are of 4 to 7 letters. <b><span style="color:#cc0000;">It's hard to say if the speaker use title of 4 to 7 words will gain high views</b></span>, but <b><span style="color:#cc0000;">when the talk has a too long title like over 12 words, the views are apprantly relatively low. </b></span>
+
+
+<br><br><br><br><br>
+<p style="text-align:right"> <b>Made by: Jianuo Han<br>Source By: Kaggle Dataset</p></b>
+<br><br><br><br><br>
+<div align="center";>
+	<img src="tedend.png";>
+           </div>
+
+
+
+	   
+
+</body>
+</html>

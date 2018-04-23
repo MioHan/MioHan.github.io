@@ -17,7 +17,7 @@
   </body>
   <script>
  
-    d3.csv("teddata zhengli.csv", function(error, data) {
+    d3.csv("length.csv", function(error, data) {
 		if(error) {
 			console.log("Error!");
 		}
@@ -39,7 +39,7 @@
 
 		    var xScale = d3.scaleLinear()
 		      .domain([0, maxlengths])
-		      .range([padding, window.innerWidth - padding * 2]);
+		      .range([padding, 800]);
 
 		    var svg = d3.select("#viz")
 		      .attr("width", window.innerWidth)
@@ -73,8 +73,8 @@
 		      .attr("cx", padding)
 		      .attr("cy", 100)
 		      .attr("r", 5)
-		      .attr("fill","black")
-		      .attr("stroke","black")
+		      .attr("fill","#f05545")
+		      .attr("stroke","#041328")
 		      
 		      .on("mouseenter", function(d) {
 		        d3.select("#tooltip")
@@ -93,13 +93,9 @@
 		        })
 				.attr("cy", function(d) {
 		          return yScale(d.views);
-		        })
-		        
-		        	
-		        ;
-	
-    });
-//开始画散点图
+		        });
+
+		//开始画散点图
 //x轴
 var maxlengths = d3.max(data, function(d) {
 		      return parseInt(d.duration);
@@ -113,7 +109,12 @@ var maxlengths = d3.max(data, function(d) {
 
 		    var xScale = d3.scaleLinear()
 		      .domain([0, maxlengths])
-		      .range([padding, window.innerWidth - padding * 2]);
+		      .range([padding, window.innerWidth + padding * 20]);
+		      //添加x轴
+	svg.append("g")
+		.attr("class","axis")
+		.attr("transform","translate(" + width + "," + height + ")")
+		.call(xAxis); 
 //svg hua bu da xiao
 		    var svg = d3.select("#viz")
 		      .attr("width", window.innerWidth)
@@ -140,7 +141,13 @@ var maxlengths = d3.max(data, function(d) {
 				.call(yAxis);
 
 		    var circles = svg.selectAll("circle")
-		      .data(data);
+		  		      .data(data);
+
+		      
+		
+	
+    });
+
   </script>
 
 
